@@ -1,0 +1,196 @@
+{
+  "version": "2026-06-07",
+  "note": "Typical caffeine values. 'caffeine_mg' is per serving_ml. Branded entries may use a 'sizes' array. Always prefer a printed label over these estimates.",
+  "drinks": [
+    {
+      "id": "espresso-single",
+      "name": { "en": "Espresso (single shot)", "ko": "에스프레소 (1샷)" },
+      "category": "coffee",
+      "serving_ml": 30,
+      "caffeine_mg": 75,
+      "per_100ml": 250,
+      "keywords": ["espresso", "shot", "에스프레소", "샷"],
+      "source": "Barista Life",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "drip-coffee",
+      "name": { "en": "Drip / brewed coffee", "ko": "드립 / 브루드 커피" },
+      "category": "coffee",
+      "serving_ml": 240,
+      "caffeine_mg": 95,
+      "per_100ml": 40,
+      "keywords": ["drip", "brewed", "filter", "드립", "브루드", "핸드드립"],
+      "source": "Toast POS",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "cold-brew",
+      "name": { "en": "Cold brew", "ko": "콜드브루" },
+      "category": "coffee",
+      "serving_ml": 355,
+      "caffeine_mg": 205,
+      "per_100ml": 58,
+      "keywords": ["cold brew", "콜드브루", "더치"],
+      "source": "Toast POS",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "latte-cappuccino",
+      "name": { "en": "Latte / Cappuccino (2 shots)", "ko": "라떼 / 카푸치노 (2샷)" },
+      "category": "coffee",
+      "serving_ml": 355,
+      "caffeine_mg": 150,
+      "per_100ml": 42,
+      "keywords": ["latte", "cappuccino", "flat white", "라떼", "카푸치노", "플랫화이트"],
+      "source": "Derived (≈75 mg/shot)",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "kr-cafe-americano-avg",
+      "name": { "en": "Cafe americano (Korea, average)", "ko": "카페 아메리카노 (국내 평균)" },
+      "category": "cafe",
+      "region": "KR",
+      "serving_ml": 355,
+      "caffeine_mg": 142,
+      "per_100ml": 40,
+      "range_per_100ml": [26, 56],
+      "keywords": ["americano", "아메리카노", "카페"],
+      "source": "경향신문 (식약처 조사)",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "starbucks-kr-americano",
+      "name": { "en": "Starbucks Americano (KR)", "ko": "스타벅스 아메리카노" },
+      "category": "cafe",
+      "brand": "Starbucks",
+      "region": "KR",
+      "sizes": [
+        { "label": "Short", "ml": 237, "caffeine_mg": 75 },
+        { "label": "Tall", "ml": 355, "caffeine_mg": 150 },
+        { "label": "Grande", "ml": 473, "caffeine_mg": 225 },
+        { "label": "Venti", "ml": 591, "caffeine_mg": 300 }
+      ],
+      "keywords": ["starbucks", "americano", "스타벅스", "아메리카노"],
+      "source": "Starbucks KR",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "ediya-americano",
+      "name": { "en": "Ediya Americano", "ko": "이디야 아메리카노" },
+      "category": "cafe",
+      "brand": "Ediya",
+      "region": "KR",
+      "sizes": [
+        { "label": "Regular", "ml": 355, "caffeine_mg": 103 },
+        { "label": "Extra", "ml": 591, "caffeine_mg": 206 }
+      ],
+      "keywords": ["ediya", "이디야", "아메리카노"],
+      "source": "coffee4m",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "instant-coffee-mix",
+      "name": { "en": "Instant coffee mix (1 stick)", "ko": "커피믹스 (1스틱)" },
+      "category": "instant",
+      "region": "KR",
+      "serving_ml": 150,
+      "caffeine_mg": 69,
+      "keywords": ["instant", "mix", "maxim", "커피믹스", "믹스", "맥심"],
+      "source": "식약처 조사",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "canned-coffee",
+      "name": { "en": "Canned coffee", "ko": "캔커피" },
+      "category": "rtd",
+      "region": "KR",
+      "serving_ml": 175,
+      "caffeine_mg": 74,
+      "keywords": ["canned", "can coffee", "캔커피", "레쓰비", "조지아"],
+      "source": "식약처 조사",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "hot6",
+      "name": { "en": "Hot6ix energy drink", "ko": "핫식스" },
+      "category": "energy",
+      "region": "KR",
+      "serving_ml": 250,
+      "caffeine_mg": 60,
+      "keywords": ["hot6", "hotsix", "핫식스", "에너지"],
+      "source": "Cheat Day Design",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "red-bull",
+      "name": { "en": "Red Bull", "ko": "레드불" },
+      "category": "energy",
+      "serving_ml": 250,
+      "caffeine_mg": 80,
+      "keywords": ["red bull", "redbull", "레드불", "에너지"],
+      "source": "Cheat Day Design",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "monster",
+      "name": { "en": "Monster Energy", "ko": "몬스터 에너지" },
+      "category": "energy",
+      "serving_ml": 355,
+      "caffeine_mg": 160,
+      "keywords": ["monster", "몬스터", "에너지"],
+      "source": "Cheat Day Design",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "green-tea",
+      "name": { "en": "Green tea", "ko": "녹차" },
+      "category": "tea",
+      "serving_ml": 240,
+      "caffeine_mg": 15,
+      "keywords": ["green tea", "녹차", "차"],
+      "source": "식약처 조사",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "black-tea",
+      "name": { "en": "Black tea", "ko": "홍차" },
+      "category": "tea",
+      "serving_ml": 240,
+      "caffeine_mg": 47,
+      "keywords": ["black tea", "홍차", "차"],
+      "source": "USDA FoodData Central",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "cola",
+      "name": { "en": "Cola (250 mL)", "ko": "콜라 (250 mL)" },
+      "category": "soda",
+      "serving_ml": 250,
+      "caffeine_mg": 23,
+      "keywords": ["cola", "coke", "콜라", "코카콜라"],
+      "source": "식약처 조사",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "dark-chocolate",
+      "name": { "en": "Dark chocolate (30 g)", "ko": "다크초콜릿 (30 g)" },
+      "category": "food",
+      "serving_ml": 0,
+      "caffeine_mg": 16,
+      "keywords": ["chocolate", "dark chocolate", "초콜릿", "초콜렛"],
+      "source": "식약처 조사",
+      "last_verified": "2026-06-07"
+    },
+    {
+      "id": "decaf-coffee",
+      "name": { "en": "Decaf coffee", "ko": "디카페인 커피" },
+      "category": "coffee",
+      "serving_ml": 240,
+      "caffeine_mg": 3,
+      "keywords": ["decaf", "decaffeinated", "디카페인", "디카페"],
+      "source": "USDA FoodData Central",
+      "last_verified": "2026-06-07"
+    }
+  ]
+}

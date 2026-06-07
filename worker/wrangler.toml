@@ -1,0 +1,12 @@
+name = "caffeine-analyze"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+
+# --- Secrets (NEVER commit real values) ---
+# Production:  npx wrangler secret put GEMINI_API_KEY
+# Local dev:   put GEMINI_API_KEY in worker/.dev.vars (gitignored)
+
+[vars]
+# Which provider/model the worker uses. Swap to Anthropic later via vision.ts.
+VISION_PROVIDER = "gemini"
+GEMINI_MODEL = "gemini-2.0-flash"
