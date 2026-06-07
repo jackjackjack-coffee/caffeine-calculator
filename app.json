@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Caffeine Calculator",
+    "slug": "caffeine-calculator",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "caffeinecalc",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1110"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.caffeinecalc.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "We use the camera to scan drinks and read caffeine labels."
+      }
+    },
+    "android": {
+      "package": "com.caffeinecalc.app",
+      "permissions": ["CAMERA"]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Caffeine Calculator to use the camera to scan drinks and read caffeine labels."
+        }
+      ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "analyzeApiUrl": "https://YOUR-WORKER.workers.dev/analyze"
+    }
+  }
+}
