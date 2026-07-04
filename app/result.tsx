@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -51,12 +52,20 @@ export default function ResultScreen() {
   const confidencePct = Math.round((drink.confidence ?? 0) * 100);
 
   async function onAdd() {
+    if (saving) return;
     setSaving(true);
-    await addIntake({
-      caffeine_mg: Number(mg) || 0,
-      product_name: name.trim() || t('result.product'),
-      method: drink.method,
-    });
+    try {
+      await addIntake({
+        caffeine_mg: Number(mg) || 0,
+        product_name: name.trim() || t('result.product'),
+        method: drink.method,
+      });
+    } catch {
+      // DB write failed — keep the screen usable instead of a stuck button.
+      setSaving(false);
+      Alert.alert(t('app.title'), t('result.error'));
+      return;
+    }
     if (router.canDismiss()) {
       router.dismissAll();
     } else {

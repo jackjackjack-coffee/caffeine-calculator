@@ -18,6 +18,28 @@ export function analyzeUrl(): string {
   return url;
 }
 
+/**
+ * fetch with a hard timeout — a hung request would otherwise leave the
+ * camera screen on "analyzing…" forever. (Manual AbortController rather
+ * than AbortSignal.timeout: Hermes doesn't guarantee the static helper.)
+ */
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number
+): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+const BARCODE_TIMEOUT_MS = 8_000;
+const VISION_TIMEOUT_MS = 30_000;
+
 /** Open Food Facts stores nutriment caffeine in grams; normalise to mg. */
 export function extractCaffeineMg(product: { nutriments?: Record<string, unknown> }): number | null {
   const n = product?.nutriments ?? {};
@@ -37,7 +59,7 @@ export async function lookupBarcode(barcode: string): Promise<AnalysisResult | n
   const url = `https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(
     barcode
   )}.json?fields=product_name,nutriments`;
-  const res = await fetch(url);
+  const res = await fetchWithTimeout(url, {}, BARCODE_TIMEOUT_MS);
   if (!res.ok) return null;
   const json = (await res.json()) as { status?: number; product?: Record<string, any> };
   const product = json.product;
@@ -53,13 +75,26 @@ export async function lookupBarcode(barcode: string): Promise<AnalysisResult | n
   };
 }
 
+/** Optional shared secret matching the worker's APP_KEY (empty = not used). */
+function analyzeAppKey(): string | null {
+  const key = (Constants.expoConfig?.extra as Record<string, unknown> | undefined)?.analyzeApiKey;
+  return typeof key === 'string' && key.length > 0 ? key : null;
+}
+
 /** Step 2: send the photo to the worker for label OCR / recognition / estimate. */
 export async function analyzeImage(base64: string): Promise<AnalysisResult> {
-  const res = await fetch(analyzeUrl(), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ image_base64: base64 }),
-  });
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  const appKey = analyzeAppKey();
+  if (appKey) headers['X-App-Key'] = appKey;
+  const res = await fetchWithTimeout(
+    analyzeUrl(),
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ image_base64: base64 }),
+    },
+    VISION_TIMEOUT_MS
+  );
   if (!res.ok) {
     throw new Error(`Analyze request failed (${res.status})`);
   }
