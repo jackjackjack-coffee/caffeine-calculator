@@ -7,8 +7,13 @@ import type { VisionEnv } from './types';
 const CORS_HEADERS: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Headers': 'Content-Type, X-App-Key',
+  'Access-Control-Max-Age': '86400',
 };
+
+// A 0.5-quality phone JPEG is well under 2 MB; base64 inflates ~4/3.
+// Anything past this is not a legitimate app capture.
+const MAX_BODY_BYTES = 8 * 1024 * 1024;
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -30,9 +35,37 @@ export default {
     }
 
     if (url.pathname === '/analyze' && request.method === 'POST') {
+      // Optional shared app secret: set `wrangler secret put APP_KEY` and ship
+      // the same value in the app to shut out third-party callers entirely.
+      if (env.APP_KEY && request.headers.get('X-App-Key') !== env.APP_KEY) {
+        return json({ error: 'Unauthorized' }, 401);
+      }
+
+      // Optional per-client rate limit (Workers rate limiting binding).
+      if (env.ANALYZE_LIMITER) {
+        const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+        try {
+          const { success } = await env.ANALYZE_LIMITER.limit({ key: ip });
+          if (!success) {
+            return json({ error: 'Too many requests, slow down' }, 429);
+          }
+        } catch {
+          // A limiter outage must not take the API down with it.
+        }
+      }
+
+      const declared = Number(request.headers.get('Content-Length') ?? 0);
+      if (declared > MAX_BODY_BYTES) {
+        return json({ error: 'Image too large' }, 413);
+      }
+
       let payload: { image_base64?: string };
       try {
-        payload = (await request.json()) as { image_base64?: string };
+        const raw = await request.text();
+        if (raw.length > MAX_BODY_BYTES) {
+          return json({ error: 'Image too large' }, 413);
+        }
+        payload = JSON.parse(raw) as { image_base64?: string };
       } catch {
         return json({ error: 'Invalid JSON body' }, 400);
       }
@@ -46,8 +79,10 @@ export default {
         const result = await analyze(base64, env);
         return json(result);
       } catch (err) {
-        const message = err instanceof Error ? err.message : 'Analysis failed';
-        return json({ error: message }, 502);
+        // Log the detail (may contain upstream diagnostics) server-side only;
+        // clients get a stable, generic message.
+        console.error('analyze failed:', err instanceof Error ? err.message : err);
+        return json({ error: 'Analysis failed, please retry' }, 502);
       }
     }
 
